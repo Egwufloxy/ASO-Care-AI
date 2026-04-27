@@ -23,3 +23,4 @@ if results:
 
 else:
     print("No matching symptoms found. Please consult a doctor.")
+    
