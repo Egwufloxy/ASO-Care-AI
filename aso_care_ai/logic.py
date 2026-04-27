@@ -1,39 +1,31 @@
+from aso_care_ai.ml_model import predict_disease
+
 def analyze_symptoms(symptoms):
     text = " ".join(symptoms).lower()
 
-    # Smarter keyword groups
-    conditions = [
-        {
-            "keywords": ["fever", "high temperature", "hot body", "chills"],
-            "condition": "Possible Malaria or Infection",
-            "advice": "Rest, stay hydrated, and consider malaria test if symptoms persist."
-        },
-        {
-            "keywords": ["headache", "head pain", "migraine"],
-            "condition": "Headache / Migraine",
-            "advice": "Rest in a dark room and reduce screen time."
-        },
-        {
-            "keywords": ["cough", "sore throat", "catarrh", "cold"],
-            "condition": "Respiratory Infection",
-            "advice": "Drink warm fluids and monitor symptoms."
-        },
-        {
-            "keywords": ["stomach", "diarrhea", "vomit", "nausea"],
-            "condition": "Stomach Infection",
-            "advice": "Stay hydrated and avoid solid heavy food."
-        }
-    ]
+    prediction = predict_disease(text)
 
-    results = []
-    score = 0
+    # Simple mapping for advice
+    advice_map = {
+        "Malaria": "Rest, hydrate, and get a malaria test.",
+        "Headache": "Reduce stress and rest in a quiet room.",
+        "Flu": "Drink warm fluids and rest.",
+        "Food Poisoning": "Stay hydrated and avoid solid food temporarily."
+    }
 
-    for c in conditions:
-        if any(k in text for k in c["keywords"]):
-            results.append({
-                "condition": c["condition"],
-                "advice": c["advice"]
-            })
-            score += 2
+    results = [{
+        "condition": prediction,
+        "advice": advice_map.get(prediction, "Consult a doctor for proper diagnosis.")
+    }]
+
+    # simple severity scoring
+    score_map = {
+        "Malaria": 5,
+        "Food Poisoning": 4,
+        "Flu": 3,
+        "Headache": 2
+    }
+
+    score = score_map.get(prediction, 1)
 
     return results, score
