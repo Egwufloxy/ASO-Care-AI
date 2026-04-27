@@ -1,4 +1,4 @@
-from aso_care_ai.ml_model import predict_disease
+from ml_model import predict_disease
 
 def analyze_symptoms(symptoms):
     text = " ".join(symptoms).lower()
