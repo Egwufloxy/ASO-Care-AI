@@ -1,27 +1,39 @@
 import streamlit as st
 from aso_care_ai.logic import analyze_symptoms
 
-st.set_page_config(page_title="ASO Care AI", page_icon="🩺", layout="centered")
+st.set_page_config(
+    page_title="ASO Care AI",
+    page_icon="🩺",
+    layout="centered"
+)
 
+# Header
 st.title("🩺 ASO Care AI")
-st.caption("AI-powered symptom checker (educational use only)")
+st.caption("AI-powered symptom checker for educational use only")
 
-user_input = st.text_area("Describe your symptoms", placeholder="e.g. I have fever and headache")
+st.divider()
+
+# Input section
+user_input = st.text_area(
+    "Describe your symptoms",
+    placeholder="e.g. fever, headache, body pain..."
+)
 
 col1, col2 = st.columns(2)
 
 with col1:
-    analyze = st.button("Analyze Symptoms")
+    analyze_btn = st.button("Analyze")
 
 with col2:
-    clear = st.button("Clear")
+    clear_btn = st.button("Clear")
 
-if clear:
+if clear_btn:
     st.rerun()
 
-if analyze:
+# Result section
+if analyze_btn:
     if not user_input.strip():
-        st.warning("Please enter symptoms first.")
+        st.warning("Please enter your symptoms first.")
     else:
         symptoms = [user_input.lower()]
         results, score = analyze_symptoms(symptoms)
@@ -29,20 +41,29 @@ if analyze:
         st.divider()
         st.subheader("🔍 Analysis Result")
 
+        # Severity badge
+        if score >= 5:
+            st.error("🔴 HIGH RISK")
+        elif score >= 3:
+            st.warning("🟠 MEDIUM RISK")
+        else:
+            st.success("🟢 LOW RISK")
+
+        st.write("---")
+
+        # Results cards
         if results:
             for r in results:
-                st.success(f"Condition: {r['condition']}")
-                st.write(f"💡 Advice: {r['advice']}")
-                st.write("---")
-
-            st.subheader("⚠️ Risk Level")
-
-            if score >= 5:
-                st.error("HIGH RISK — Seek medical attention immediately")
-            elif score >= 3:
-                st.warning("MEDIUM RISK — Monitor closely")
-            else:
-                st.success("LOW RISK — Basic care recommended")
-
+                with st.container():
+                    st.markdown(
+                        f"""
+                        ### 🧾 {r['condition']}
+                        💡 **Advice:** {r['advice']}
+                        ---
+                        """
+                    )
         else:
-            st.info("No matching symptoms found. Please consult a doctor.")
+            st.info("No strong match found. Please consult a medical professional.")
+        
+        # Footer note
+        st.caption("⚠️ This tool is not a substitute for professional medical advice.")
