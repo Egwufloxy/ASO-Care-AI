@@ -1,26 +1,39 @@
-import json
+def analyze_symptoms(symptoms):
+    text = " ".join(symptoms).lower()
 
-def load_data():
-    with open("aso_care_ai/data.json") as f:
-        return json.load(f)
+    # Smarter keyword groups
+    conditions = [
+        {
+            "keywords": ["fever", "high temperature", "hot body", "chills"],
+            "condition": "Possible Malaria or Infection",
+            "advice": "Rest, stay hydrated, and consider malaria test if symptoms persist."
+        },
+        {
+            "keywords": ["headache", "head pain", "migraine"],
+            "condition": "Headache / Migraine",
+            "advice": "Rest in a dark room and reduce screen time."
+        },
+        {
+            "keywords": ["cough", "sore throat", "catarrh", "cold"],
+            "condition": "Respiratory Infection",
+            "advice": "Drink warm fluids and monitor symptoms."
+        },
+        {
+            "keywords": ["stomach", "diarrhea", "vomit", "nausea"],
+            "condition": "Stomach Infection",
+            "advice": "Stay hydrated and avoid solid heavy food."
+        }
+    ]
 
-def analyze_symptoms(user_input):
-    db = load_data()
     results = []
-    severity_score = 0
+    score = 0
 
-    text = " ".join(user_input)
+    for c in conditions:
+        if any(k in text for k in c["keywords"]):
+            results.append({
+                "condition": c["condition"],
+                "advice": c["advice"]
+            })
+            score += 2
 
-    for symptom in db:
-        if symptom in text:
-            data = db[symptom]
-            results.append(data)
-
-            if data["severity"] == "high":
-                severity_score += 3
-            elif data["severity"] == "medium":
-                severity_score += 2
-            else:
-                severity_score += 1
-
-    return results, severity_score
+    return results, score
