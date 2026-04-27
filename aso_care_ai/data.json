@@ -1,0 +1,27 @@
+{
+  "fever": {
+    "condition": "Flu",
+    "advice": "Rest, stay hydrated, monitor temperature",
+    "severity": "medium"
+  },
+  "cough": {
+    "condition": "Common Cold",
+    "advice": "Drink warm fluids and rest",
+    "severity": "low"
+  },
+  "headache": {
+    "condition": "Stress or Migraine",
+    "advice": "Rest in a quiet place and hydrate",
+    "severity": "low"
+  },
+  "tiredness": {
+    "condition": "Fatigue",
+    "advice": "Get enough sleep and eat well",
+    "severity": "low"
+  },
+  "chest pain": {
+    "condition": "Possible Heart Issue",
+    "advice": "Seek immediate medical attention",
+    "severity": "high"
+  }
+}
