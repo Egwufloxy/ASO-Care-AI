@@ -1,5 +1,5 @@
 import streamlit as st
-from aso_care_ai.logic import analyze_symptoms
+from logic import analyze_symptoms
 
 st.set_page_config(
     page_title="ASO Care AI",
