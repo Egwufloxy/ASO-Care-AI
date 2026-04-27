@@ -10,10 +10,10 @@ st.set_page_config(
 # ===== HEADER =====
 st.markdown(
     """
-    <h1 style='text-align: center; color: #2E86C1;'>🩺 ASO Care AI</h1>
-    <p style='text-align: center; color: gray;'>
-    AI-powered symptom checker for quick health insights
-    </p>
+    <div style='text-align:center;'>
+        <h1>🩺 ASO Care AI</h1>
+        <p style='color:gray;'>Smart AI-powered symptom checker</p>
+    </div>
     """,
     unsafe_allow_html=True
 )
@@ -22,8 +22,8 @@ st.write("---")
 
 # ===== INPUT =====
 user_input = st.text_area(
-    "Describe your symptoms",
-    placeholder="e.g. fever, headache, nausea..."
+    "Enter your symptoms",
+    placeholder="e.g. fever, headache, body pain..."
 )
 
 col1, col2 = st.columns(2)
@@ -40,38 +40,35 @@ if clear:
 # ===== RESULTS =====
 if analyze:
     if not user_input.strip():
-        st.warning("Please enter your symptoms first.")
+        st.warning("Please enter symptoms first.")
     else:
         symptoms = [user_input.lower()]
         results, score = analyze_symptoms(symptoms)
 
         st.write("---")
-        st.subheader("📊 Analysis Result")
+        st.subheader("📊 Result")
 
-        # ===== RISK BADGE =====
+        # Risk display
         if score >= 5:
-            st.markdown("### 🔴 HIGH RISK")
-            st.error("Seek medical attention immediately")
+            st.error("🔴 HIGH RISK")
         elif score >= 3:
-            st.markdown("### 🟠 MEDIUM RISK")
-            st.warning("Monitor your symptoms closely")
+            st.warning("🟠 MEDIUM RISK")
         else:
-            st.markdown("### 🟢 LOW RISK")
-            st.success("Basic care should be enough")
+            st.success("🟢 LOW RISK")
 
         st.write("---")
 
-        # ===== CARDS STYLE OUTPUT =====
+        # Result cards
         if results:
             for r in results:
                 st.markdown(
                     f"""
                     <div style="
-                        background-color: #f5f7fa;
-                        padding: 15px;
-                        border-radius: 10px;
-                        margin-bottom: 10px;
-                        border-left: 5px solid #2E86C1;
+                        padding:15px;
+                        border-radius:10px;
+                        background-color:#f4f6f7;
+                        border-left:5px solid #3498db;
+                        margin-bottom:10px;
                     ">
                         <h4>🧾 {r['condition']}</h4>
                         <p><b>💡 Advice:</b> {r['advice']}</p>
@@ -80,8 +77,8 @@ if analyze:
                     unsafe_allow_html=True
                 )
         else:
-            st.info("No strong match found. Please consult a medical professional.")
+            st.info("No match found. Please consult a doctor.")
 
 # ===== FOOTER =====
 st.write("---")
-st.caption("⚠️ Educational tool only. Not a replacement for medical advice.")
+st.caption("⚠️ Educational tool only. Not medical advice.")
